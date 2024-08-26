@@ -15,7 +15,7 @@ def main():
         print("Wrong format")
 
     network = extract_network(args.ip)
-    hosts = list(network.hosts())
+    num_addresses = network.num_addresses
 
     table = Table(show_header=True, box=box.SIMPLE_HEAD, header_style="bold magenta")
     table.add_column("Network")
@@ -27,9 +27,9 @@ def main():
     table.add_row(
         format(network.network_address),
         format(network.netmask),
-        format(hosts[0]),
-        format(hosts[-1]),
-        str(len(hosts)),
+        format(network.network_address+1),
+        format(network.network_address+num_addresses-1),
+        str(num_addresses-2),
     )
 
     console.print(table)
@@ -97,10 +97,11 @@ def inside_subnets(network, args):
 
     console.print(table)
 
-    tree = Tree(format(network), guide_style="magenta")
-    for sub in subnets:
-        tree.add(format(sub))
-    console.print(tree)
+    if args.subnet:
+        tree = Tree(format(network), guide_style="magenta")
+        for sub in subnets:
+            tree.add(format(sub))
+        console.print(tree)
 
 
 if __name__ == "__main__":
