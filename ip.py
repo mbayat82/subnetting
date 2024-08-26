@@ -92,7 +92,7 @@ def inside_subnets(network, args):
             str(f"/{i}"),
         )
 
-        if args.subnet and str(i) == args.subnet:
+        if args.subnet and (str(i) == args.subnet) or ('/'+str(i) == args.subnet):
             subnets = temp_subnets
 
     console.print(table)
