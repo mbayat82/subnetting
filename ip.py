@@ -82,7 +82,7 @@ def inside_subnets(network, args):
     table.add_column("#")
     table.add_column("CIDR")
 
-    for i in range(mask + 1, 31):
+    for i in range(mask + 1, mask + 8):
 
         temp_subnets = list(network.subnets(new_prefix=i))
         num = len(temp_subnets)
