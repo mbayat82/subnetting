@@ -15,8 +15,22 @@ def main():
         print("Wrong format")
 
     network = extract_network(args.ip)
+    mask = network.prefixlen
     num_addresses = network.num_addresses
-
+    if mask == 31:
+        hosts = list(network.hosts())
+        first_host = hosts[0]
+        last_host = hosts[-1]
+        host_count = 2
+    elif mask == 32:
+        first_host = list(network.hosts())[0]
+        last_host = list(network.hosts())[0]
+        host_count = 1
+    else:
+        first_host = network.network_address+1
+        last_host = network.network_address+num_addresses-1
+        host_count = num_addresses-2
+    
     table = Table(show_header=True, box=box.SIMPLE_HEAD, header_style="bold magenta")
     table.add_column("Network")
     table.add_column("Netmask")
@@ -27,9 +41,9 @@ def main():
     table.add_row(
         format(network.network_address),
         format(network.netmask),
-        format(network.network_address+1),
-        format(network.network_address+num_addresses-1),
-        str(num_addresses-2),
+        format(first_host),
+        format(last_host),
+        str(f'{host_count:,}'),
     )
 
     console.print(table)
